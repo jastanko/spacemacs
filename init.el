@@ -573,6 +573,7 @@ before packages are loaded."
   (global-visual-line-mode 1)
   (setq ispell-program-name "/opt/homebrew/bin/aspell")
   (setq ispell-dictionary "english")
+  (setq org-startup-folded 'content)
 
   (add-hook 'snake-mode-hook
             (lambda ()
