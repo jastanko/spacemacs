@@ -477,7 +477,7 @@ It should only modify the values of Spacemacs settings."
    ;; The backend used for undo/redo functionality. Possible values are
    ;; `undo-redo', `undo-fu' and `undo-tree' see also `evil-undo-system'.
    ;; Note that saved undo history does not get transferred when changing
-   ;; your undo system from or to undo-tree. (default `undo-redo')"
+   ;; your undo system from or to undo-tree. (default `undo-redo')
    dotspacemacs-undo-system 'undo-redo
 
    ;; Format specification for setting the frame title.
@@ -593,7 +593,7 @@ before packages are loaded."
   (add-hook 'tetris-mode-hook
             (lambda ()
               (define-key tetris-mode-map "h" 'tetris-move-left)
-              (define-key tetris-mode-map "j" 'tetris-move-down)
+              (define-key tetris-mode-map "j" 'tetris-rotate-next)
               (define-key tetris-mode-map "k" 'tetris-rotate-prev)
               (define-key tetris-mode-map "l" 'tetris-move-right)
               )
