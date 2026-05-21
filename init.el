@@ -32,7 +32,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(csv
+   '(toml
+     csv
      javascript
      python
      markdown
@@ -179,7 +180,7 @@ It should only modify the values of Spacemacs settings."
    ;; Show numbers before the startup list lines. (default t)
    dotspacemacs-show-startup-list-numbers t
 
-   ;; The minimum delay in seconds between number key presses. (default 0.4)
+   ;; The maximum delay in seconds between number key presses. (default 0.4)
    dotspacemacs-startup-buffer-multi-digit-delay 0.4
 
    ;; If non-nil, show file icons for entries and headings on Spacemacs home buffer.
@@ -230,8 +231,8 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-colorize-cursor-according-to-state t
 
    ;; Default font or prioritized list of fonts. This setting has no effect when
-   ;; running Emacs in terminal. The font set here will be used for default and
-   ;; fixed-pitch faces. The `:size' can be specified as
+   ;; running Emacs in terminal. The font set here will be used for `default' and
+   ;; `fixed-pitch' faces. The `:size' can be specified as
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("Source Code Pro"
@@ -348,9 +349,12 @@ It should only modify the values of Spacemacs settings."
    ;; Spacemacs on Windows. Refer the FAQ.org "load-hints" session for details.
    dotspacemacs-enable-load-hints nil
 
-   ;; If t, enable the `package-quickstart' feature to avoid full package
-   ;; loading, otherwise no `package-quickstart' attemption (default nil).
-   ;; Refer the FAQ.org "package-quickstart" section for details.
+   ;; If non-nil, enable the `package-quickstart' feature to avoid activating
+   ;; all package autoloads one by one.
+   ;; Requires building and maintaining a quickstart autoload file for all
+   ;; installed packages.
+   ;; Refer to the FAQ.org "package-quickstart" section for details.
+   ;; (default nil)
    dotspacemacs-enable-package-quickstart nil
 
    ;; If non-nil a progress bar is displayed when spacemacs is loading. This
@@ -446,7 +450,9 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
    ;; over any automatically added closing parenthesis, bracket, quote, etc...
-   ;; This can be temporary disabled by pressing `C-q' before `)'. (default nil)
+   ;; This can be temporary disabled by pressing `C-q' before `)'.
+   ;; Only effective when `dotspacemacs-activate-smartparens-mode' is non-nil.
+   ;; Redundant when `smartparens-strict-mode' is enabled. (default nil)
    dotspacemacs-smart-closing-parenthesis nil
 
    ;; Select a scope to highlight delimiters. Possible values are `any',
@@ -614,7 +620,54 @@ This function is called at the very end of Spacemacs initialization."
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
    '(package-selected-packages
-     '(csv-mode flyspell-correct-helm flyspell-correct mwim unfill org add-node-modules-path impatient-mode htmlize import-js grizzl js-doc js2-refactor yasnippet multiple-cursors livid-mode nodejs-repl npm-mode prettier-js skewer-mode js2-mode simple-httpd tern web-beautify blacken code-cells company-anaconda anaconda-mode counsel-gtags counsel swiper ivy cython-mode dap-mode lsp-docker lsp-treemacs bui yaml ggtags helm-cscope helm-pydoc importmagic epc ctable concurrent deferred live-py-mode lsp-pyright lsp-mode nose pip-requirements pipenv load-env-vars pippel poetry transient compat py-isort pydoc pyenv-mode pythonic pylookup pytest pyvenv sphinx-doc stickyfunc-enhance xcscope yapfify company-emoji emoji-cheat-sheet-plus gh-md markdown-toc markdown-mode valign vmd-mode company yaml-mode ws-butler writeroom-mode winum which-key volatile-highlights vim-powerline vi-tilde-fringe uuidgen undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil toc-org term-cursor symon symbol-overlay string-inflection string-edit-at-point spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline space-doc restart-emacs request rainbow-delimiters quickrun popwin pcre2el password-generator paradox overseer org-superstar open-junk-file nameless multi-line macrostep lorem-ipsum link-hint inspector info+ indent-guide hybrid-mode hungry-delete holy-mode hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-descbinds helm-comint helm-ag google-translate golden-ratio flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav elisp-demos elisp-def editorconfig dumb-jump drag-stuff dotenv-mode dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile all-the-icons aggressive-indent ace-link ace-jump-helm-line)))
+     '(ace-jump-helm-line ace-link add-node-modules-path aggressive-indent
+                          all-the-icons anaconda-mode auto-compile
+                          auto-highlight-symbol blacken bui centered-cursor-mode
+                          clean-aindent-mode code-cells column-enforce-mode
+                          company company-anaconda company-emoji compat concurrent
+                          counsel counsel-gtags csv-mode ctable cython-mode
+                          dap-mode deferred define-word devdocs diminish
+                          dired-quick-sort dotenv-mode drag-stuff dumb-jump
+                          editorconfig elisp-def elisp-demos elisp-slime-nav
+                          emoji-cheat-sheet-plus emr epc eval-sexp-fu evil-anzu
+                          evil-args evil-cleverparens evil-collection
+                          evil-easymotion evil-escape evil-evilified-state
+                          evil-exchange evil-goggles evil-iedit-state
+                          evil-indent-plus evil-lion evil-lisp-state evil-matchit
+                          evil-mc evil-nerd-commenter evil-numbers evil-surround
+                          evil-textobj-line evil-tutor evil-unimpaired
+                          evil-visual-mark-mode evil-visualstar expand-region
+                          eyebrowse fancy-battery flx-ido flycheck-elsa
+                          flycheck-package flyspell-correct flyspell-correct-helm
+                          ggtags gh-md golden-ratio google-translate grizzl
+                          helm-ag helm-comint helm-cscope helm-descbinds helm-make
+                          helm-mode-manager helm-org helm-projectile helm-purpose
+                          helm-pydoc helm-swoop helm-themes helm-xref hide-comnt
+                          highlight-indentation highlight-numbers
+                          highlight-parentheses hl-todo holy-mode htmlize
+                          hungry-delete hybrid-mode impatient-mode import-js
+                          importmagic indent-guide info+ inspector ivy js-doc
+                          js2-mode js2-refactor link-hint live-py-mode livid-mode
+                          load-env-vars lorem-ipsum lsp-docker lsp-mode
+                          lsp-pyright lsp-treemacs macrostep markdown-mode
+                          markdown-toc multi-line multiple-cursors mwim nameless
+                          nodejs-repl nose npm-mode open-junk-file org
+                          org-superstar overseer paradox password-generator
+                          pcre2el pip-requirements pipenv pippel poetry popwin
+                          prettier-js py-isort pydoc pyenv-mode pylookup pytest
+                          pythonic pyvenv quickrun rainbow-delimiters request
+                          restart-emacs simple-httpd skewer-mode space-doc
+                          spaceline spacemacs-purpose-popwin
+                          spacemacs-whitespace-cleanup sphinx-doc
+                          stickyfunc-enhance string-edit-at-point
+                          string-inflection swiper symbol-overlay symon
+                          term-cursor tern toc-org toml-mode transient
+                          treemacs-evil treemacs-icons-dired treemacs-persp
+                          treemacs-projectile undo-tree unfill uuidgen valign
+                          vi-tilde-fringe vim-powerline vmd-mode
+                          volatile-highlights web-beautify which-key winum
+                          writeroom-mode ws-butler xcscope yaml yaml-mode yapfify
+                          yasnippet)))
   (custom-set-faces
    ;; custom-set-faces was added by Custom.
    ;; If you edit it by hand, you could mess it up, so be careful.
